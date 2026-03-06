@@ -438,6 +438,162 @@
       line-height: 1.6;
     }
 
+    /* ── Pricing section ──────────────────────────────────────── */
+    .pricing-section {
+      padding: 96px 24px;
+      text-align: center;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 56px auto 0;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: left;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .pricing-card.featured {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(204,26,26,0.12);
+    }
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .pricing-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .pricing-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-1);
+      margin-bottom: 6px;
+    }
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin: 16px 0 8px;
+    }
+    .pricing-price .amount {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--text-1);
+      line-height: 1;
+    }
+    .pricing-price .unit {
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    .pricing-sub {
+      font-size: 12px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .pricing-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+    .pricing-features {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pricing-features li {
+      font-size: 13px;
+      color: var(--text-2);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.4;
+    }
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .pricing-cta {
+      display: block;
+      width: 100%;
+      margin-top: 28px;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .pricing-cta.gold {
+      background: var(--gold);
+      color: #fff;
+    }
+    .pricing-cta.gold:hover { opacity: 0.88; transform: translateY(-1px); }
+    .pricing-cta.outline {
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+    .pricing-cta.outline:hover { border-color: var(--gold); color: var(--gold); }
+    .savings-banner {
+      max-width: 900px;
+      margin: 40px auto 0;
+      background: linear-gradient(135deg, rgba(204,26,26,0.08) 0%, rgba(184,184,184,0.06) 100%);
+      border: 1px solid var(--gold-border);
+      border-radius: 14px;
+      padding: 24px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      text-align: left;
+    }
+    .savings-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+    .savings-text h4 {
+      color: var(--text-1);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .savings-text p {
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .savings-text strong { color: var(--silver); }
+    @media (max-width: 640px) {
+      .savings-banner { flex-direction: column; }
+    }
+
     /* ── Download section ─────────────────────────────────────── */
     .download-section {
       padding: 96px 24px;
@@ -1078,6 +1234,78 @@
     </div>
   </section>
 
+  <!-- ─── Pricing ───────────────────────────────────────────────── -->
+  <section class="pricing-section fade-up" id="pricing">
+    <div class="container">
+      <p class="section-label">Pricing</p>
+      <h2>Simple, per-seat pricing.<br/><span class="gold-text">No surprises.</span></h2>
+      <p class="section-desc">One key per production manager. Contestant keys purchased in bulk — priced for the size of your cast.</p>
+
+      <div class="pricing-grid">
+
+        <!-- Production Manager Key -->
+        <div class="pricing-card">
+          <div class="pricing-label">Admin</div>
+          <div class="pricing-name">Production Manager Key</div>
+          <div class="pricing-price">
+            <span class="amount">$65</span>
+            <span class="unit">/ manager</span>
+          </div>
+          <p class="pricing-sub">One key per production manager. Grants full access to the admin dashboard for any number of productions.</p>
+          <hr class="pricing-divider">
+          <ul class="pricing-features">
+            <li>Unlimited productions</li>
+            <li>Live device monitoring &amp; map</li>
+            <li>Lock / release phones remotely</li>
+            <li>Real-time alerts &amp; messaging</li>
+            <li>Geofence enforcement</li>
+            <li>Full activity audit log</li>
+          </ul>
+          <a href="mailto:sales@productionguard.app?subject=Production Manager Key" class="pricing-cta outline">Contact Sales</a>
+        </div>
+
+        <!-- Contestant Keys -->
+        <div class="pricing-card featured">
+          <div class="pricing-badge">MOST POPULAR</div>
+          <div class="pricing-label">Cast</div>
+          <div class="pricing-name">Contestant Keys</div>
+          <div class="pricing-price">
+            <span class="amount">$3.99</span>
+            <span class="unit">/ contestant</span>
+          </div>
+          <p class="pricing-sub">Up to 100 keys. Add more at <strong style="color:var(--silver)">$2.99 each</strong> any time — no minimums, no contracts.</p>
+          <hr class="pricing-divider">
+          <ul class="pricing-features">
+            <li>Bulk purchase at time of onboarding</li>
+            <li>Additional keys at $2.99 (101+)</li>
+            <li>Kiosk lockdown on contestant device</li>
+            <li>GPS &amp; geofence tracking</li>
+            <li>In-app messaging &amp; medic SOS</li>
+            <li>Keys valid for entire production</li>
+          </ul>
+          <a href="mailto:sales@productionguard.app?subject=Contestant Keys" class="pricing-cta gold">Get Started</a>
+        </div>
+
+      </div>
+
+      <!-- Broken Phone Savings Banner -->
+      <div class="savings-banner fade-up">
+        <div class="savings-icon">🛡️</div>
+        <div class="savings-text">
+          <h4>The cost of one broken phone claim justifies the entire season.</h4>
+          <p>
+            Reality TV productions face thousands of dollars in broken or tampered device claims every season.
+            Production Guard's hardware-level kiosk lock prevents contestants from accessing third-party apps,
+            making unauthorized calls, or intentionally damaging phones to regain freedom.
+            <strong>At $3.99 per contestant key, a 20-person cast costs less than $80 —
+            a fraction of a single phone replacement.</strong>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ─── Download ──────────────────────────────────────────────── -->
   <section class="download-section fade-up" id="download">
     <div class="container">
@@ -1159,6 +1387,7 @@
       <div class="footer-links">
         <a href="mailto:support@productionguard.app">Support</a>
         <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
         <a href="#download">Download</a>
       </div>
 
