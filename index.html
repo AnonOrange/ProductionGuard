@@ -625,6 +625,140 @@
       .footer-links { justify-content: center; }
     }
 
+    /* ── Live Map Section ─────────────────────────────────────────── */
+    .map-section {
+      padding: 96px 24px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .map-layout { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .map-copy h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .map-desc {
+      font-size: 16px;
+      color: var(--text-2);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .map-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .map-bullets li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .bullet-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+    .map-bullets strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .map-bullets span {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.55;
+    }
+
+    .map-mockup {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.08);
+    }
+
+    .map-bg { width: 100%; height: auto; display: block; }
+
+    .map-alert-chip {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,59,48,0.15);
+      border: 1px solid rgba(255,59,48,0.5);
+      color: #FF3B30;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+
+    .alert-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #FF3B30;
+      animation: pulse-red 1s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-red {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .map-live-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13,13,13,0.75);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: pulse-green 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
     /* ── Scroll animations ────────────────────────────────────── */
     .fade-up {
       opacity: 0;
@@ -680,10 +814,10 @@
       <span class="gold-text">Production</span><br/>Guard
     </h1>
 
-    <p class="hero-tagline">Device control for live productions.</p>
+    <p class="hero-tagline">Device control &amp; live tracking for productions.</p>
 
     <p class="hero-sub">
-      Lock contestant phones, monitor real-time activity, and respond to emergencies — all from one admin dashboard.
+      Lock contestant phones, track every location in real time on a live map, and respond to emergencies — all from one admin dashboard.
     </p>
 
     <div class="hero-buttons">
@@ -767,9 +901,9 @@
         </div>
 
         <div class="feature-card fade-up">
-          <div class="feature-icon">📍</div>
-          <h3>Geofence Alerts</h3>
-          <p>Set geographic boundaries for your production. Receive an immediate alert any time a contestant steps outside the designated zone.</p>
+          <div class="feature-icon">🗺️</div>
+          <h3>Live Map & Geofencing</h3>
+          <p>Watch every contestant's position update in real time on an interactive map. Set geographic boundaries and get instant alerts the moment anyone steps out of bounds.</p>
         </div>
 
         <div class="feature-card fade-up">
@@ -782,6 +916,139 @@
           <div class="feature-icon">🎮</div>
           <h3>Producer-Approved Apps & Games</h3>
           <p>Producers can grant contestants access to a curated selection of apps and games — keeping phones entertaining without breaking lockdown. A reward that's fully in your control.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Live Map Section ─────────────────────────────────────────── -->
+  <section class="map-section fade-up" id="live-map">
+    <div class="container">
+      <div class="map-layout">
+
+        <!-- Left: copy -->
+        <div class="map-copy">
+          <p class="section-label">Live Location</p>
+          <h2>Every contestant.<br/><span class="gold-text">On the map.<br/>Right now.</span></h2>
+          <p class="map-desc">Production Guard streams each contestant's GPS location to your admin dashboard in real time. No guessing where anyone is — every pin updates live as they move.</p>
+
+          <ul class="map-bullets">
+            <li>
+              <span class="bullet-icon">📍</span>
+              <div>
+                <strong>Live GPS pins</strong>
+                <span>Every contestant shown by name on an interactive map, updating continuously.</span>
+              </div>
+            </li>
+            <li>
+              <span class="bullet-icon">⛔</span>
+              <div>
+                <strong>Custom geofence zones</strong>
+                <span>Draw a boundary around your production area. Any breach triggers an instant alert.</span>
+              </div>
+            </li>
+            <li>
+              <span class="bullet-icon">📜</span>
+              <div>
+                <strong>Location history</strong>
+                <span>Replay contestant movement trails throughout the production for review.</span>
+              </div>
+            </li>
+            <li>
+              <span class="bullet-icon">🚨</span>
+              <div>
+                <strong>Instant geofence alerts</strong>
+                <span>Push notification fires the moment a contestant leaves the approved zone.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: map mockup -->
+        <div class="map-mockup-wrap">
+          <div class="map-mockup">
+            <!-- SVG dark map grid -->
+            <svg class="map-bg" viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid lines -->
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2C2C2E" stroke-width="0.8"/>
+                </pattern>
+              </defs>
+              <rect width="480" height="360" fill="#111111"/>
+              <rect width="480" height="360" fill="url(#grid)"/>
+
+              <!-- Roads -->
+              <line x1="0" y1="120" x2="480" y2="120" stroke="#242424" stroke-width="8"/>
+              <line x1="0" y1="240" x2="480" y2="240" stroke="#242424" stroke-width="8"/>
+              <line x1="120" y1="0" x2="120" y2="360" stroke="#242424" stroke-width="8"/>
+              <line x1="280" y1="0" x2="280" y2="360" stroke="#242424" stroke-width="8"/>
+              <line x1="400" y1="0" x2="400" y2="360" stroke="#242424" stroke-width="5"/>
+
+              <!-- City blocks -->
+              <rect x="130" y="130" width="60" height="40" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="200" y="130" width="70" height="40" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="130" y="180" width="40" height="50" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="180" y="180" width="90" height="50" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="290" y="130" width="100" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="10" y="130" width="100" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="130" y="250" width="140" height="60" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="10" y="250" width="100" height="60" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="290" y="250" width="100" height="60" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="10" y="10" width="100" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="130" y="10" width="140" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="290" y="10" width="100" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="410" y="10" width="60" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="410" y="130" width="60" height="100" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+              <rect x="410" y="250" width="60" height="60" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
+
+              <!-- Geofence zone -->
+              <ellipse cx="240" cy="180" rx="155" ry="115" fill="rgba(255,215,0,0.04)" stroke="#FFD700" stroke-width="1.5" stroke-dasharray="8 5"/>
+
+              <!-- Contestant pins -->
+              <!-- Pin 1 - green (inside) -->
+              <circle cx="170" cy="155" r="10" fill="#34C759" fill-opacity="0.2" stroke="#34C759" stroke-width="1.5"/>
+              <circle cx="170" cy="155" r="4" fill="#34C759"/>
+              <text x="182" y="150" fill="#FFFFFF" font-size="9" font-family="Inter,sans-serif" font-weight="600">Alex</text>
+
+              <!-- Pin 2 - green (inside) -->
+              <circle cx="310" cy="170" r="10" fill="#34C759" fill-opacity="0.2" stroke="#34C759" stroke-width="1.5"/>
+              <circle cx="310" cy="170" r="4" fill="#34C759"/>
+              <text x="322" y="165" fill="#FFFFFF" font-size="9" font-family="Inter,sans-serif" font-weight="600">Jordan</text>
+
+              <!-- Pin 3 - green (inside) -->
+              <circle cx="220" cy="220" r="10" fill="#34C759" fill-opacity="0.2" stroke="#34C759" stroke-width="1.5"/>
+              <circle cx="220" cy="220" r="4" fill="#34C759"/>
+              <text x="232" y="215" fill="#FFFFFF" font-size="9" font-family="Inter,sans-serif" font-weight="600">Sam</text>
+
+              <!-- Pin 4 - RED (outside geofence / breaching) -->
+              <circle cx="58" cy="88" r="12" fill="#FF3B30" fill-opacity="0.25" stroke="#FF3B30" stroke-width="1.5"/>
+              <circle cx="58" cy="88" r="5" fill="#FF3B30"/>
+              <circle cx="58" cy="88" r="12" fill="none" stroke="#FF3B30" stroke-width="1" opacity="0.5">
+                <animate attributeName="r" values="12;20;12" dur="1.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.5;0;0.5" dur="1.5s" repeatCount="indefinite"/>
+              </circle>
+              <text x="72" y="83" fill="#FF3B30" font-size="9" font-family="Inter,sans-serif" font-weight="700">Morgan ⚠</text>
+
+              <!-- Pin 5 - green (inside) -->
+              <circle cx="260" cy="145" r="10" fill="#34C759" fill-opacity="0.2" stroke="#34C759" stroke-width="1.5"/>
+              <circle cx="260" cy="145" r="4" fill="#34C759"/>
+              <text x="272" y="140" fill="#FFFFFF" font-size="9" font-family="Inter,sans-serif" font-weight="600">Casey</text>
+            </svg>
+
+            <!-- Alert chip overlaid on map -->
+            <div class="map-alert-chip">
+              <span class="alert-dot"></span>
+              <span>GEOFENCE BREACH — Morgan</span>
+            </div>
+
+            <!-- Live badge -->
+            <div class="map-live-badge">
+              <span class="live-dot"></span>
+              LIVE
+            </div>
+          </div>
         </div>
 
       </div>
