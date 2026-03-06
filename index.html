@@ -31,6 +31,7 @@
       --gold-dark:   #991111;
       --gold-dim:    rgba(204, 26, 26, 0.12);
       --gold-border: rgba(204, 26, 26, 0.25);
+      --silver:      #B8B8B8;
       --text-1:      #FFFFFF;
       --text-2:      #8E8E93;
       --danger:      #FF3B30;
@@ -777,13 +778,20 @@
   <nav>
     <div class="nav-inner">
       <div class="nav-logo">
-        <!-- Shield SVG icon -->
+        <!-- Shield + Lock icon -->
         <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2L4 7V16C4 22.627 9.373 28 16 30C22.627 28 28 22.627 28 16V7L16 2Z"
                 fill="#CC1A1A" fill-opacity="0.15" stroke="#CC1A1A" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M11 16L14.5 19.5L21 13" stroke="#CC1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Lock body -->
+          <rect x="10" y="17" width="12" height="9" rx="2" fill="#CC1A1A" fill-opacity="0.9"/>
+          <!-- Lock shackle -->
+          <path d="M12 17V14C12 11.791 13.791 10 16 10C18.209 10 20 11.791 20 14V17" stroke="#CC1A1A" stroke-width="1.8" stroke-linecap="round"/>
+          <!-- Keyhole -->
+          <circle cx="16" cy="21" r="1.5" fill="rgba(0,0,0,0.4)"/>
         </svg>
-        <span class="nav-logo-text gold-text">Production Guard</span>
+        <span class="nav-logo-text">
+          <span style="color:var(--silver);letter-spacing:1.5px">PRODUCTION</span>&thinsp;<span style="color:var(--gold)">GUARD</span>
+        </span>
       </div>
       <a href="#download" class="nav-download">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -796,11 +804,28 @@
 
   <!-- ─── Hero ───────────────────────────────────────────────── -->
   <section class="hero">
-    <!-- Large shield -->
+    <!-- Shield + Camera + Lock hero icon -->
     <svg class="hero-icon" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shield -->
       <path d="M48 6L12 20V48C12 67.882 28.118 84 48 90C67.882 84 84 67.882 84 48V20L48 6Z"
-            fill="#CC1A1A" fill-opacity="0.12" stroke="#CC1A1A" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M33 48L43.5 58.5L63 39" stroke="#CC1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            fill="#CC1A1A" fill-opacity="0.10" stroke="#CC1A1A" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- Silver "PRODUCTION" wordmark inside shield top -->
+      <text x="48" y="32" text-anchor="middle" fill="#B8B8B8" font-size="7.5" font-family="Inter,Arial,sans-serif" font-weight="700" letter-spacing="2">PRODUCTION</text>
+      <!-- Camera body -->
+      <rect x="28" y="37" width="30" height="20" rx="3.5" fill="#CC1A1A" fill-opacity="0.25" stroke="#CC1A1A" stroke-width="1.8"/>
+      <!-- Camera lens outer -->
+      <circle cx="45" cy="47" r="7" fill="none" stroke="#CC1A1A" stroke-width="1.5"/>
+      <!-- Camera lens inner -->
+      <circle cx="45" cy="47" r="3.5" fill="#CC1A1A" fill-opacity="0.6"/>
+      <!-- Camera viewfinder bump -->
+      <rect x="56" y="41" width="8" height="6" rx="1.5" fill="#CC1A1A" fill-opacity="0.4" stroke="#CC1A1A" stroke-width="1.2"/>
+      <!-- Lock body -->
+      <rect x="38" y="65" width="20" height="14" rx="3" fill="#CC1A1A" fill-opacity="0.85"/>
+      <!-- Lock shackle -->
+      <path d="M42 65V60C42 56.686 44.686 54 48 54C51.314 54 54 56.686 54 60V65" stroke="#CC1A1A" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Lock keyhole -->
+      <circle cx="48" cy="72" r="2.2" fill="rgba(0,0,0,0.35)"/>
+      <line x1="48" y1="74.2" x2="48" y2="77" stroke="rgba(0,0,0,0.35)" stroke-width="2" stroke-linecap="round"/>
     </svg>
 
     <div class="hero-badge">
@@ -811,7 +836,8 @@
     </div>
 
     <h1>
-      <span class="gold-text">Production</span><br/>Guard
+      <span style="color:var(--silver);letter-spacing:4px;font-weight:800">PRODUCTION</span><br/>
+      <span class="gold-text" style="letter-spacing:3px">GUARD</span>
     </h1>
 
     <p class="hero-tagline">Device control &amp; live tracking for productions.</p>
@@ -1114,7 +1140,7 @@
         <div class="download-card active fade-up">
           <div class="platform-icon">🍎</div>
           <h3>iOS</h3>
-          <p>Install via <strong style="color:var(--gold)">Sideloadly</strong> (free, no Apple account needed). iOS 13+ required. Location tracking, admin dashboard, and messaging fully supported.</p>
+          <p>Install via <strong style="color:var(--silver)">Sideloadly</strong> (free, no Apple account needed). iOS 13+ required. Location tracking, admin dashboard, and messaging fully supported.</p>
           <div style="display:flex;flex-direction:column;gap:10px;width:100%">
             <a href="YOUR_IOS_IPA_LINK_HERE" class="btn-download gold" id="ios-ipa-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1137,7 +1163,7 @@
         <div class="beta-notice-icon">ℹ️</div>
         <div>
           <h4>Beta Software Notice</h4>
-          <p>Production Guard is currently in active beta. It is intended for use on dedicated production devices only. Features may change. Report issues to <a href="mailto:support@productionguard.app" style="color:var(--gold)">support@productionguard.app</a>.</p>
+          <p>Production Guard is currently in active beta. It is intended for use on dedicated production devices only. Features may change. Report issues to <a href="mailto:support@productionguard.app" style="color:var(--silver)">support@productionguard.app</a>.</p>
         </div>
       </div>
 
@@ -1165,9 +1191,11 @@
         <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2L4 7V16C4 22.627 9.373 28 16 30C22.627 28 28 22.627 28 16V7L16 2Z"
                 fill="#CC1A1A" fill-opacity="0.15" stroke="#CC1A1A" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M11 16L14.5 19.5L21 13" stroke="#CC1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="10" y="17" width="12" height="9" rx="2" fill="#CC1A1A" fill-opacity="0.9"/>
+          <path d="M12 17V14C12 11.791 13.791 10 16 10C18.209 10 20 11.791 20 14V17" stroke="#CC1A1A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="16" cy="21" r="1.5" fill="rgba(0,0,0,0.4)"/>
         </svg>
-        <span class="gold-text">Production Guard</span>
+        <span><span style="color:var(--silver);letter-spacing:1.5px">PRODUCTION</span>&thinsp;<span style="color:var(--gold)">GUARD</span></span>
       </div>
 
       <div class="footer-links">
