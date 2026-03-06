@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Production Guard — Device Control for Live Productions</title>
+  <meta name="description" content="Production Guard is the all-in-one contestant device management platform for live reality TV productions. Lock phones, monitor activity, and respond to emergencies instantly." />
+  <meta name="theme-color" content="#0D0D0D" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Production Guard — Device Control for Live Productions" />
+  <meta property="og:description" content="Lock contestant phones. Monitor activity. Respond to emergencies in real time." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://productionguard.app" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:          #0D0D0D;
+      --surface:     #1A1A1A;
+      --surface-alt: #242424;
+      --gold:        #FFD700;
+      --gold-dark:   #C9A84C;
+      --gold-dim:    rgba(255, 215, 0, 0.12);
+      --gold-border: rgba(255, 215, 0, 0.25);
+      --text-1:      #FFFFFF;
+      --text-2:      #8E8E93;
+      --danger:      #FF3B30;
+      --success:     #34C759;
+      --border:      #2C2C2E;
+      --radius:      12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Utility ──────────────────────────────────────────────── */
+    .gold-text {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 60%, #C9A84C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-download {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: opacity 0.2s;
+    }
+    .nav-download:hover { opacity: 0.85; }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Radial glow background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-icon {
+      width: 96px;
+      height: 96px;
+      margin-bottom: 28px;
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.35));
+    }
+
+    .hero-badge {
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: var(--text-2);
+      max-width: 600px;
+      margin-bottom: 16px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-2);
+      max-width: 520px;
+      margin-bottom: 44px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      letter-spacing: 0.3px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 24px rgba(255, 215, 0, 0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255, 215, 0, 0.35);
+    }
+
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--text-1);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--gold-dark);
+      background: var(--gold-dim);
+    }
+    .btn-secondary.coming-soon {
+      opacity: 0.55;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-2);
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(-6px); }
+    }
+
+    /* ── Stats bar ────────────────────────────────────────────── */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 24px;
+    }
+
+    .stats-inner {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      flex: 1;
+      min-width: 160px;
+      text-align: center;
+      padding: 8px 24px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── Section headings ─────────────────────────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    section h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    section .section-desc {
+      font-size: 16px;
+      color: var(--text-2);
+      max-width: 540px;
+      margin: 0 auto 56px;
+    }
+
+    /* ── Features ─────────────────────────────────────────────── */
+    .features {
+      padding: 96px 24px;
+      text-align: center;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      text-align: left;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--gold-border);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    /* ── How it works ─────────────────────────────────────────── */
+    .how-it-works {
+      padding: 96px 24px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      position: relative;
+    }
+
+    .step {
+      position: relative;
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    /* connector line between steps */
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50px;
+      right: 0;
+      width: 1px;
+      height: 32px;
+      background: var(--border);
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+      margin: 0 auto 16px;
+    }
+
+    .step h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* ── Download section ─────────────────────────────────────── */
+    .download-section {
+      padding: 96px 24px;
+      text-align: center;
+    }
+
+    .download-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .download-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .download-card.active { border-color: var(--gold-border); }
+    .download-card.inactive { opacity: 0.6; }
+
+    .platform-icon {
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .download-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .download-card p {
+      font-size: 13px;
+      color: var(--text-2);
+      text-align: center;
+      line-height: 1.55;
+    }
+
+    .btn-download {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    }
+    .btn-download.gold {
+      background: var(--gold);
+      color: #000;
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+    }
+    .btn-download.gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(255, 215, 0, 0.3);
+    }
+    .btn-download.outline {
+      background: transparent;
+      color: var(--text-2);
+      border: 1px solid var(--border);
+      cursor: default;
+    }
+
+    .version-note {
+      font-size: 11px;
+      color: var(--text-2);
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* ── Beta notice ──────────────────────────────────────────── */
+    .beta-notice {
+      max-width: 640px;
+      margin: 48px auto 0;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .beta-notice-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+    .beta-notice h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .beta-notice p {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* ── CTA band ─────────────────────────────────────────────── */
+    .cta-band {
+      padding: 80px 24px;
+      background: linear-gradient(135deg, rgba(255,215,0,0.07) 0%, rgba(255,165,0,0.03) 100%);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .cta-band h2 {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .cta-band p {
+      font-size: 16px;
+      color: var(--text-2);
+      margin-bottom: 36px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-2);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .stats-inner { gap: 0; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+
+      .step:not(:last-child)::after { display: none; }
+
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+
+    /* ── Scroll animations ────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Nav ────────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <!-- Shield SVG icon -->
+        <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2L4 7V16C4 22.627 9.373 28 16 30C22.627 28 28 22.627 28 16V7L16 2Z"
+                fill="#FFD700" fill-opacity="0.15" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M11 16L14.5 19.5L21 13" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nav-logo-text gold-text">Production Guard</span>
+      </div>
+      <a href="#download" class="nav-download">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Beta
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─── Hero ───────────────────────────────────────────────── -->
+  <section class="hero">
+    <!-- Large shield -->
+    <svg class="hero-icon" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M48 6L12 20V48C12 67.882 28.118 84 48 90C67.882 84 84 67.882 84 48V20L48 6Z"
+            fill="#FFD700" fill-opacity="0.12" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M33 48L43.5 58.5L63 39" stroke="#FFD700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+    <div class="hero-badge">
+      <span class="badge">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+        Beta
+      </span>
+    </div>
+
+    <h1>
+      <span class="gold-text">Production</span><br/>Guard
+    </h1>
+
+    <p class="hero-tagline">Device control for live productions.</p>
+
+    <p class="hero-sub">
+      Lock contestant phones, monitor real-time activity, and respond to emergencies — all from one admin dashboard.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="YOUR_APK_DIRECT_LINK_HERE" class="btn-primary" id="apk-btn">
+        <!-- Android icon -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.523 0H6.477L0 12l6.477 12h11.046L24 12 17.523 0zm-3.25 17.5c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zm-4.546 0c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/>
+        </svg>
+        Download for Android
+      </a>
+      <a href="#" class="btn-secondary coming-soon">
+        <!-- Apple icon -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+        </svg>
+        iOS — Coming Soon
+      </a>
+    </div>
+
+    <div class="hero-scroll">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ─── Stats bar ────────────────────────────────────────────── -->
+  <div class="stats-bar fade-up">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-number gold-text">100%</div>
+        <div class="stat-label">Device Lockdown</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number gold-text">Real-Time</div>
+        <div class="stat-label">Activity Monitoring</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number gold-text">1-Tap</div>
+        <div class="stat-label">Medic Alert</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number gold-text">0 Lag</div>
+        <div class="stat-label">Admin Dashboard</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Features ──────────────────────────────────────────────── -->
+  <section class="features fade-up" id="features">
+    <div class="container">
+      <p class="section-label">Features</p>
+      <h2>Everything your production needs,<br/><span class="gold-text">in one place.</span></h2>
+      <p class="section-desc">Built from the ground up for the demands of live reality TV.</p>
+
+      <div class="features-grid">
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🔒</div>
+          <h3>Total Device Lockdown</h3>
+          <p>Contestants' phones are locked exclusively to Production Guard the moment they enter their join code. No calls, no texts, no apps — nothing gets through.</p>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📡</div>
+          <h3>Real-Time Activity Feed</h3>
+          <p>Every action is logged and streamed live to the admin dashboard — enrollment, app open, exit attempts, messages, and more.</p>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🚨</div>
+          <h3>One-Tap Medic Alert</h3>
+          <p>Contestants can trigger an emergency medic request with a single button. Production receives an instant alert with full contestant details.</p>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">👁️</div>
+          <h3>Admin Dashboard</h3>
+          <p>Full visibility across all enrolled contestants. See who's active, who's gone silent, and any flagged activity — all on a single screen.</p>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📍</div>
+          <h3>Geofence Alerts</h3>
+          <p>Set geographic boundaries for your production. Receive an immediate alert any time a contestant steps outside the designated zone.</p>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">💬</div>
+          <h3>Secure Direct Messaging</h3>
+          <p>Two-way messaging between production staff and each contestant, fully contained within the app. No external communication apps needed.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── How it works ──────────────────────────────────────────── -->
+  <section class="how-it-works fade-up" id="how-it-works">
+    <div class="container">
+      <p class="section-label">How It Works</p>
+      <h2>Up and running <span class="gold-text">in minutes.</span></h2>
+      <p class="section-desc">No MDM enrollment. No IT department. Just create, share, lock.</p>
+
+      <div class="steps">
+        <div class="step fade-up">
+          <div class="step-number">1</div>
+          <h3>Create a Production</h3>
+          <p>Log in as admin and create a new production with one tap. A unique join code is generated automatically.</p>
+        </div>
+        <div class="step fade-up">
+          <div class="step-number">2</div>
+          <h3>Contestants Enroll</h3>
+          <p>Hand contestants a device with Production Guard installed. They scan the QR code or enter the join code to enroll.</p>
+        </div>
+        <div class="step fade-up">
+          <div class="step-number">3</div>
+          <h3>Phones Lock Down</h3>
+          <p>Once enrolled, the device locks into kiosk mode. No other apps, calls, or messages can get in or out.</p>
+        </div>
+        <div class="step fade-up">
+          <div class="step-number">4</div>
+          <h3>Monitor Everything</h3>
+          <p>Watch every contestant in real time from the admin panel. Respond to emergencies instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Download ──────────────────────────────────────────────── -->
+  <section class="download-section fade-up" id="download">
+    <div class="container">
+      <p class="section-label">Download</p>
+      <h2>Get the beta<br/><span class="gold-text">today.</span></h2>
+      <p class="section-desc">Production Guard is currently in beta. Download the Android APK directly, or sign up to be notified when iOS launches.</p>
+
+      <div class="download-cards">
+
+        <!-- Android -->
+        <div class="download-card active fade-up">
+          <div class="platform-icon">🤖</div>
+          <h3>Android</h3>
+          <p>Direct APK install. Android 10+ required. Enable "Install from unknown sources" in device settings.</p>
+          <a href="YOUR_APK_DIRECT_LINK_HERE" class="btn-download gold" id="main-apk-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download APK
+          </a>
+          <span class="version-note">v1.0.0 — Beta Release</span>
+        </div>
+
+        <!-- iOS -->
+        <div class="download-card inactive fade-up">
+          <div class="platform-icon">🍎</div>
+          <h3>iOS</h3>
+          <p>iOS version is currently in development. TestFlight access will be available for beta testers soon.</p>
+          <a href="mailto:support@productionguard.app?subject=iOS Beta Access" class="btn-download outline">
+            Notify Me for iOS
+          </a>
+          <span class="version-note">Coming Soon</span>
+        </div>
+
+      </div>
+
+      <!-- Beta notice -->
+      <div class="beta-notice fade-up">
+        <div class="beta-notice-icon">ℹ️</div>
+        <div>
+          <h4>Beta Software Notice</h4>
+          <p>Production Guard is currently in active beta. It is intended for use on dedicated production devices only. Features may change. Report issues to <a href="mailto:support@productionguard.app" style="color:var(--gold)">support@productionguard.app</a>.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── CTA band ─────────────────────────────────────────────── -->
+  <div class="cta-band fade-up">
+    <div class="container">
+      <h2>Ready to lock down your<br/><span class="gold-text">next production?</span></h2>
+      <p>Download Production Guard and take complete control of every device on set.</p>
+      <a href="#download" class="btn-primary" style="display:inline-flex;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Get the Beta
+      </a>
+    </div>
+  </div>
+
+  <!-- ─── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2L4 7V16C4 22.627 9.373 28 16 30C22.627 28 28 22.627 28 16V7L16 2Z"
+                fill="#FFD700" fill-opacity="0.15" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M11 16L14.5 19.5L21 13" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="gold-text">Production Guard</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="mailto:support@productionguard.app">Support</a>
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+      </div>
+
+      <div class="footer-copy">
+        &copy; 2025 Production Guard. Beta v1.0. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── JS: Scroll fade-in animations ─────────────────────────── -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
