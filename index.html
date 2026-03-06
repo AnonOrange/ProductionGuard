@@ -24,18 +24,18 @@
     html { scroll-behavior: smooth; }
 
     :root {
-      --bg:          #0D0D0D;
-      --surface:     #1A1A1A;
-      --surface-alt: #242424;
-      --gold:        #FFD700;
-      --gold-dark:   #C9A84C;
-      --gold-dim:    rgba(255, 215, 0, 0.12);
-      --gold-border: rgba(255, 215, 0, 0.25);
+      --bg:          #000000;
+      --surface:     #111111;
+      --surface-alt: #1C1C1C;
+      --gold:        #CC1A1A;
+      --gold-dark:   #991111;
+      --gold-dim:    rgba(204, 26, 26, 0.12);
+      --gold-border: rgba(204, 26, 26, 0.25);
       --text-1:      #FFFFFF;
       --text-2:      #8E8E93;
       --danger:      #FF3B30;
       --success:     #34C759;
-      --border:      #2C2C2E;
+      --border:      #2A2A2A;
       --radius:      12px;
     }
 
@@ -51,7 +51,7 @@
 
     /* ── Utility ──────────────────────────────────────────────── */
     .gold-text {
-      background: linear-gradient(135deg, #FFD700 0%, #FFA500 60%, #C9A84C 100%);
+      background: linear-gradient(135deg, #FF2424 0%, #CC1A1A 60%, #991111 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -123,7 +123,7 @@
       align-items: center;
       gap: 8px;
       background: var(--gold);
-      color: #000;
+      color: #fff;
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.5px;
@@ -155,7 +155,7 @@
       transform: translate(-50%, -50%);
       width: 600px;
       height: 600px;
-      background: radial-gradient(ellipse, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
+      background: radial-gradient(ellipse, rgba(204, 26, 26, 0.08) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -163,7 +163,7 @@
       width: 96px;
       height: 96px;
       margin-bottom: 28px;
-      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.35));
+      filter: drop-shadow(0 0 20px rgba(204, 26, 26, 0.45));
     }
 
     .hero-badge {
@@ -204,18 +204,18 @@
       align-items: center;
       gap: 10px;
       background: var(--gold);
-      color: #000;
+      color: #fff;
       font-size: 15px;
       font-weight: 700;
       padding: 14px 28px;
       border-radius: 10px;
       letter-spacing: 0.3px;
       transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 24px rgba(255, 215, 0, 0.25);
+      box-shadow: 0 4px 24px rgba(204, 26, 26, 0.30);
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(255, 215, 0, 0.35);
+      box-shadow: 0 8px 32px rgba(204, 26, 26, 0.45);
     }
 
     .btn-secondary {
@@ -497,12 +497,12 @@
     }
     .btn-download.gold {
       background: var(--gold);
-      color: #000;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(204, 26, 26, 0.25);
     }
     .btn-download.gold:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 8px 28px rgba(204, 26, 26, 0.40);
     }
     .btn-download.outline {
       background: transparent;
@@ -550,7 +550,7 @@
     /* ── CTA band ─────────────────────────────────────────────── */
     .cta-band {
       padding: 80px 24px;
-      background: linear-gradient(135deg, rgba(255,215,0,0.07) 0%, rgba(255,165,0,0.03) 100%);
+      background: linear-gradient(135deg, rgba(204,26,26,0.08) 0%, rgba(153,17,17,0.03) 100%);
       border-top: 1px solid var(--border);
       text-align: center;
     }
@@ -691,7 +691,7 @@
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid var(--border);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.08);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(204,26,26,0.12);
     }
 
     .map-bg { width: 100%; height: auto; display: block; }
@@ -780,8 +780,8 @@
         <!-- Shield SVG icon -->
         <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2L4 7V16C4 22.627 9.373 28 16 30C22.627 28 28 22.627 28 16V7L16 2Z"
-                fill="#FFD700" fill-opacity="0.15" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M11 16L14.5 19.5L21 13" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                fill="#CC1A1A" fill-opacity="0.15" stroke="#CC1A1A" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M11 16L14.5 19.5L21 13" stroke="#CC1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <span class="nav-logo-text gold-text">Production Guard</span>
       </div>
@@ -799,8 +799,8 @@
     <!-- Large shield -->
     <svg class="hero-icon" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M48 6L12 20V48C12 67.882 28.118 84 48 90C67.882 84 84 67.882 84 48V20L48 6Z"
-            fill="#FFD700" fill-opacity="0.12" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M33 48L43.5 58.5L63 39" stroke="#FFD700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            fill="#CC1A1A" fill-opacity="0.12" stroke="#CC1A1A" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M33 48L43.5 58.5L63 39" stroke="#CC1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
 
     <div class="hero-badge">
@@ -912,7 +912,7 @@
           <p>Two-way messaging between production staff and each contestant, fully contained within the app. No external communication apps needed.</p>
         </div>
 
-        <div class="feature-card fade-up" style="border-color: var(--gold-border); background: linear-gradient(135deg, var(--surface) 0%, rgba(255,215,0,0.04) 100%);">
+        <div class="feature-card fade-up" style="border-color: var(--gold-border); background: linear-gradient(135deg, var(--surface) 0%, rgba(204,26,26,0.04) 100%);">
           <div class="feature-icon">🎮</div>
           <h3>Producer-Approved Apps & Games</h3>
           <p>Producers can grant contestants access to a curated selection of apps and games — keeping phones entertaining without breaking lockdown. A reward that's fully in your control.</p>
@@ -1004,7 +1004,7 @@
               <rect x="410" y="250" width="60" height="60" rx="3" fill="#1E1E1E" stroke="#2C2C2E" stroke-width="0.5"/>
 
               <!-- Geofence zone -->
-              <ellipse cx="240" cy="180" rx="155" ry="115" fill="rgba(255,215,0,0.04)" stroke="#FFD700" stroke-width="1.5" stroke-dasharray="8 5"/>
+              <ellipse cx="240" cy="180" rx="155" ry="115" fill="rgba(204,26,26,0.06)" stroke="#CC1A1A" stroke-width="1.5" stroke-dasharray="8 5"/>
 
               <!-- Contestant pins -->
               <!-- Pin 1 - green (inside) -->
@@ -1164,8 +1164,8 @@
       <div class="footer-logo">
         <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2L4 7V16C4 22.627 9.373 28 16 30C22.627 28 28 22.627 28 16V7L16 2Z"
-                fill="#FFD700" fill-opacity="0.15" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M11 16L14.5 19.5L21 13" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                fill="#CC1A1A" fill-opacity="0.15" stroke="#CC1A1A" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M11 16L14.5 19.5L21 13" stroke="#CC1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <span class="gold-text">Production Guard</span>
       </div>
