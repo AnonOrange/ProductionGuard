@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Production Guard — Dev Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0a;
+      --surface:  #141414;
+      --surface2: #1a1a1a;
+      --border:   #2a2a2a;
+      --gold:     #c8a84b;
+      --gold-dim: #9a7d32;
+      --text-1:   #f0f0f0;
+      --text-2:   #888;
+      --green:    #34c759;
+      --red:      #ff5555;
+      --silver:   #aab0bc;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Gate ──────────────────────────────────────────────── */
+    #gate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .gate-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .gate-box img { width: 56px; height: 56px; margin-bottom: 16px; }
+    .gate-box h1 { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 4px; }
+    .gate-box p  { font-size: 13px; color: var(--text-2); margin-bottom: 28px; }
+    .gate-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 16px;
+      color: var(--text-1);
+      font-size: 15px;
+      outline: none;
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+    .gate-input:focus { border-color: var(--gold); }
+    .gate-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+    }
+    .gate-btn:hover { opacity: 0.85; }
+    .gate-error { color: var(--red); font-size: 12px; margin-top: 12px; display: none; }
+
+    /* ── Dashboard ─────────────────────────────────────────── */
+    #dashboard { display: none; }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-left img { width: 32px; height: 32px; }
+    .topbar-left span { font-size: 13px; font-weight: 700; letter-spacing: 1px; color: var(--text-1); }
+    .topbar-left .badge {
+      background: var(--gold);
+      color: #000;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+    .topbar-right button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .topbar-right button:hover { color: var(--text-1); border-color: var(--text-2); }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 36px 24px 80px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* ── Issue Key Card ────────────────────────────────────── */
+    .issue-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      margin-bottom: 40px;
+    }
+    .issue-card h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-1);
+      margin-bottom: 4px;
+    }
+    .issue-card p {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .field label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-2);
+      text-transform: uppercase;
+    }
+    .field input, .field select, .field textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: var(--text-1);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
+    .field select option { background: #1a1a1a; }
+    .field textarea { resize: vertical; min-height: 70px; }
+
+    .qty-field { display: none; }
+
+    .issue-btn {
+      padding: 12px 28px;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .issue-btn:hover { opacity: 0.85; }
+    .issue-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ── Result Box ────────────────────────────────────────── */
+    .result-box {
+      display: none;
+      margin-top: 20px;
+      background: #0d1f0d;
+      border: 1px solid #2a5c2a;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .result-box.error-box { background: #1f0d0d; border-color: #5c2a2a; }
+    .result-label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: #4a9e4a;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .result-box.error-box .result-label { color: var(--red); }
+    .result-key {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: var(--gold);
+      font-family: 'Courier New', Courier, monospace;
+      margin-bottom: 6px;
+    }
+    .result-meta { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+
+    /* ── Keys Table ────────────────────────────────────────── */
+    .keys-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .refresh-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .refresh-btn:hover { color: var(--text-1); border-color: var(--text-2); }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 12px 16px; color: var(--text-1); vertical-align: middle; }
+    .key-mono {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+    .badge-type {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .badge-pm { background: rgba(200,168,75,0.15); color: var(--gold); }
+    .badge-ct { background: rgba(170,176,188,0.15); color: var(--silver); }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-2);
+      font-size: 13px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; display: inline-block; }
+  </style>
+</head>
+<body>
+
+<!-- ─── Password Gate ────────────────────────────────────── -->
+<div id="gate">
+  <div class="gate-box">
+    <img src="pg_logo.png" alt="Production Guard">
+    <h1>Dev Dashboard</h1>
+    <p>Production Guard · Vibe Software Solutions</p>
+    <input type="password" id="gate-input" class="gate-input" placeholder="Enter admin password" autocomplete="current-password">
+    <button class="gate-btn" onclick="unlock()">Unlock Dashboard</button>
+    <div class="gate-error" id="gate-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ─── Dashboard ────────────────────────────────────────── -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="pg_logo.png" alt="">
+      <span>PRODUCTION GUARD</span>
+      <span class="badge">DEV</span>
+    </div>
+    <div class="topbar-right">
+      <button onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- Issue Key Section -->
+    <div class="section-title">Issue Free Key</div>
+    <div class="issue-card">
+      <h2>Assign Complimentary License</h2>
+      <p>Generate a free key for a client, tester, or demo account. The key is saved to the database and emailed to the recipient instantly.</p>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Recipient Email</label>
+          <input type="email" id="f-email" placeholder="client@studio.com" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Key Type</label>
+          <select id="f-type" onchange="onTypeChange()">
+            <option value="pm">Production Manager ($65 value)</option>
+            <option value="contestant">Contestant Keys ($3.99+ value)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field qty-field" id="qty-wrap">
+        <label>Number of Contestant Keys</label>
+        <input type="number" id="f-qty" value="20" min="1" max="500">
+      </div>
+
+      <div class="field">
+        <label>Note (optional)</label>
+        <textarea id="f-note" placeholder="e.g. Test account for Survivor Season 47 pilot"></textarea>
+      </div>
+
+      <button class="issue-btn" id="issue-btn" onclick="issueKey()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Issue Free Key
+      </button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-label" id="result-label">Key Issued Successfully</div>
+        <div class="result-key" id="result-key"></div>
+        <div class="result-meta" id="result-meta"></div>
+      </div>
+    </div>
+
+    <!-- Recent Keys Section -->
+    <div class="keys-header">
+      <div class="section-title" style="margin:0">Recently Issued Complimentary Keys</div>
+      <button class="refresh-btn" onclick="loadKeys()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Type</th>
+            <th>Qty</th>
+            <th>Email</th>
+            <th>Issued</th>
+          </tr>
+        </thead>
+        <tbody id="keys-tbody">
+          <tr><td colspan="5"><div class="empty-state">Loading…</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const API = 'https://dkcecjxindnoxfflbsab.supabase.co/functions/v1/admin-generate-key'
+  let _secret = ''
+
+  // ── Gate ────────────────────────────────────────────────
+  function unlock() {
+    const val = document.getElementById('gate-input').value.trim()
+    if (!val) return
+    _secret = val
+    // Verify by hitting the list endpoint
+    fetch(`${API}?admin_secret=${encodeURIComponent(_secret)}`)
+      .then(r => {
+        if (r.status === 401) {
+          document.getElementById('gate-error').style.display = 'block'
+          _secret = ''
+        } else {
+          sessionStorage.setItem('pg_dev_secret', _secret)
+          showDashboard()
+          r.json().then(d => renderKeys(d.keys || []))
+        }
+      })
+      .catch(() => {
+        document.getElementById('gate-error').style.display = 'block'
+        _secret = ''
+      })
+  }
+
+  function logout() {
+    sessionStorage.removeItem('pg_dev_secret')
+    _secret = ''
+    document.getElementById('dashboard').style.display = 'none'
+    document.getElementById('gate').style.display = 'flex'
+    document.getElementById('gate-input').value = ''
+  }
+
+  function showDashboard() {
+    document.getElementById('gate').style.display = 'none'
+    document.getElementById('dashboard').style.display = 'block'
+  }
+
+  // Auto-restore session
+  window.addEventListener('load', () => {
+    const saved = sessionStorage.getItem('pg_dev_secret')
+    if (saved) {
+      _secret = saved
+      fetch(`${API}?admin_secret=${encodeURIComponent(_secret)}`)
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(d => { showDashboard(); renderKeys(d.keys || []) })
+        .catch(() => { sessionStorage.removeItem('pg_dev_secret'); _secret = '' })
+    }
+  })
+
+  // Enter key on password input
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlock()
+  })
+
+  // ── Form ─────────────────────────────────────────────────
+  function onTypeChange() {
+    const type = document.getElementById('f-type').value
+    document.getElementById('qty-wrap').style.display = type === 'contestant' ? 'flex' : 'none'
+  }
+
+  async function issueKey() {
+    const email = document.getElementById('f-email').value.trim()
+    const type  = document.getElementById('f-type').value
+    const qty   = parseInt(document.getElementById('f-qty').value || '1', 10)
+    const note  = document.getElementById('f-note').value.trim()
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showResult(false, '', 'Please enter a valid email address.', '')
+      return
+    }
+
+    const btn = document.getElementById('issue-btn')
+    btn.disabled = true
+    btn.innerHTML = '<span class="spin">⟳</span> Issuing…'
+
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_secret: _secret, type, quantity: qty, email, note: note || undefined }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Unknown error')
+
+      showResult(true, data.key,
+        `Emailed to ${data.email}` + (note ? `\nNote: ${note}` : ''),
+        '')
+      loadKeys()
+    } catch (err) {
+      showResult(false, '', '', err.message)
+    } finally {
+      btn.disabled = false
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Issue Free Key'
+    }
+  }
+
+  function showResult(ok, key, meta, err) {
+    const box = document.getElementById('result-box')
+    box.className = 'result-box' + (ok ? '' : ' error-box')
+    box.style.display = 'block'
+    document.getElementById('result-label').textContent = ok ? '✓ Key Issued — Email Sent' : '✗ Error'
+    document.getElementById('result-key').textContent = key
+    document.getElementById('result-meta').style.whiteSpace = 'pre-line'
+    document.getElementById('result-meta').textContent = ok ? meta : err
+  }
+
+  // ── Keys Table ───────────────────────────────────────────
+  function loadKeys() {
+    document.getElementById('keys-tbody').innerHTML =
+      '<tr><td colspan="5"><div class="empty-state">Loading…</div></td></tr>'
+    fetch(`${API}?admin_secret=${encodeURIComponent(_secret)}`)
+      .then(r => r.json())
+      .then(d => renderKeys(d.keys || []))
+      .catch(() => {
+        document.getElementById('keys-tbody').innerHTML =
+          '<tr><td colspan="5"><div class="empty-state">Failed to load keys.</div></td></tr>'
+      })
+  }
+
+  function renderKeys(keys) {
+    const tbody = document.getElementById('keys-tbody')
+    if (!keys.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">No complimentary keys issued yet.</div></td></tr>'
+      return
+    }
+    tbody.innerHTML = keys.map(k => `
+      <tr>
+        <td><span class="key-mono">${k.key}</span></td>
+        <td><span class="badge-type ${k.type === 'pm' ? 'badge-pm' : 'badge-ct'}">${k.type === 'pm' ? 'PM' : 'CONTESTANT'}</span></td>
+        <td>${k.quantity}</td>
+        <td style="color:var(--text-2);font-size:12px;">${k.email}</td>
+        <td style="color:var(--text-2);font-size:12px;">${new Date(k.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}</td>
+      </tr>
+    `).join('')
+  }
+</script>
+
+</body>
+</html>
