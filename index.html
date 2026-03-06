@@ -1401,22 +1401,20 @@
           <div class="pricing-label">Cast</div>
           <div class="pricing-name">Contestant Keys</div>
           <div class="pricing-price">
-            <span class="amount">$3.99</span>
+            <span class="amount">$2.99</span>
             <span class="unit">/ contestant</span>
           </div>
-          <p class="pricing-sub">Up to 100 keys. Add more at <strong style="color:var(--silver)">$2.99 each</strong> any time — no minimums, no contracts.</p>
+          <p class="pricing-sub">Flat $2.99 per key — no minimums, no contracts. <strong style="color:var(--gold)">Free licenses include 50 keys.</strong></p>
           <hr class="pricing-divider">
           <ul class="pricing-features">
-            <li>Bulk purchase at time of onboarding</li>
-            <li>Additional keys at $2.99 (101+)</li>
+            <li>50 keys included with every free license</li>
+            <li>Add more at $2.99 each, any time</li>
             <li>Kiosk lockdown on contestant device</li>
             <li>GPS &amp; geofence tracking</li>
             <li>In-app messaging &amp; medic SOS</li>
             <li>Keys valid for entire production</li>
           </ul>
-          <div style="text-align:center;padding:14px;border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2);line-height:1.5;">
-            🔑 Contestant keys are purchased &amp; distributed<br>through the <strong style="color:var(--text-1)">Admin Dashboard</strong> after logging in.
-          </div>
+          <button class="pricing-cta gold" onclick="openBuyModal('contestant')">Buy Contestant Keys — $2.99</button>
         </div>
 
       </div>
@@ -1536,17 +1534,22 @@
   <div id="buy-modal" class="modal-overlay" onclick="if(event.target===this)closeBuyModal()">
     <div class="modal-box">
       <button class="modal-close" onclick="closeBuyModal()" aria-label="Close">✕</button>
-      <div class="modal-title">Production Manager Key</div>
-      <div class="modal-subtitle">One-time purchase — instant access to the admin dashboard for unlimited productions.</div>
+      <div class="modal-title" id="modal-title">Production Manager Key</div>
+      <div class="modal-subtitle" id="modal-subtitle">One-time purchase — instant access to the admin dashboard for unlimited productions.</div>
 
       <div class="modal-field">
         <label>Your email address</label>
         <input type="email" id="modal-email" placeholder="you@studio.com" autocomplete="email">
       </div>
 
+      <div class="modal-field" id="modal-qty-field" style="display:none">
+        <label>Number of contestant keys</label>
+        <input type="number" id="modal-qty" min="1" max="9999" value="20" oninput="updatePricePreview()">
+      </div>
+
       <div class="modal-price-preview">
-        <span class="preview-label">Total (one-time)</span>
-        <span class="preview-amount">$65.00</span>
+        <span class="preview-label" id="preview-label">Total (one-time)</span>
+        <span class="preview-amount" id="preview-amount">$65.00</span>
       </div>
 
       <button class="modal-submit" id="modal-submit" onclick="submitBuyModal()">
@@ -1585,15 +1588,40 @@
   <!-- ─── JS: Buy Modal ─────────────────────────────────────────── -->
   <script>
     const CHECKOUT_URL = 'https://dkcecjxindnoxfflbsab.supabase.co/functions/v1/create-checkout';
+    let _modalType = 'pm';
+
+    function updatePricePreview() {
+      if (_modalType === 'pm') {
+        document.getElementById('preview-label').textContent = 'Total (one-time)';
+        document.getElementById('preview-amount').textContent = '$65.00';
+      } else {
+        const qty = Math.max(1, parseInt(document.getElementById('modal-qty').value || '1', 10));
+        const total = (qty * 2.99).toFixed(2);
+        document.getElementById('preview-label').textContent = `${qty} key${qty === 1 ? '' : 's'} × $2.99`;
+        document.getElementById('preview-amount').textContent = `$${total}`;
+      }
+    }
 
     function openBuyModal(type) {
-      // Only PM keys are sold on the site
+      _modalType = type;
       document.getElementById('buy-modal').classList.add('open');
       document.getElementById('modal-email').value = '';
       document.getElementById('modal-error').style.display = 'none';
       document.getElementById('modal-error').textContent = '';
       document.getElementById('modal-submit').disabled = false;
       document.getElementById('modal-submit').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Continue to Payment';
+
+      if (type === 'pm') {
+        document.getElementById('modal-title').textContent = 'Production Manager Key';
+        document.getElementById('modal-subtitle').textContent = 'One-time purchase — instant access to the admin dashboard for unlimited productions. Includes 50 contestant keys.';
+        document.getElementById('modal-qty-field').style.display = 'none';
+      } else {
+        document.getElementById('modal-title').textContent = 'Contestant Keys';
+        document.getElementById('modal-subtitle').textContent = 'Additional contestant keys at $2.99 each. Enter in your admin dashboard to enroll more cast devices.';
+        document.getElementById('modal-qty-field').style.display = 'flex';
+        document.getElementById('modal-qty').value = '20';
+      }
+      updatePricePreview();
       document.body.style.overflow = 'hidden';
       setTimeout(() => document.getElementById('modal-email').focus(), 120);
     }
@@ -1626,10 +1654,14 @@
       submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Redirecting to Stripe…';
 
       try {
+        const payload = { type: _modalType, email };
+        if (_modalType === 'contestant') {
+          payload.quantity = Math.max(1, parseInt(document.getElementById('modal-qty').value || '1', 10));
+        }
         const res = await fetch(CHECKOUT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'pm', email })
+          body: JSON.stringify(payload)
         });
 
         if (!res.ok) {
