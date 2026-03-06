@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Production Guard — Store Assets</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: Arial, sans-serif; padding: 40px; color: #fff; }
+  h2 { color: #ccc; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; margin-top: 40px; }
+  .label { color: #888; font-size: 11px; margin-top: 8px; }
+
+  /* ── 512×512 Play Store Icon ───────────────────── */
+  .icon-512 {
+    width: 512px;
+    height: 512px;
+    background: #0a0a0a;
+    border-radius: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .icon-512::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, #2a0000 0%, #0a0a0a 70%);
+  }
+  .icon-512 img {
+    position: relative;
+    width: 420px;
+    height: auto;
+    filter: drop-shadow(0 8px 24px rgba(200,0,0,0.5));
+  }
+
+  /* ── 1024×500 Feature Graphic ─────────────────── */
+  .feature-1024 {
+    width: 1024px;
+    height: 500px;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-1024::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, #1a0000 0%, #0a0a0a 60%),
+                radial-gradient(ellipse at 80% 80%, #0d0d0d 0%, transparent 60%);
+  }
+  .feature-left {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .feature-left img {
+    width: 340px;
+    height: auto;
+    filter: drop-shadow(0 8px 32px rgba(200,0,0,0.4));
+  }
+  .feature-right {
+    position: relative;
+    z-index: 1;
+    text-align: right;
+    max-width: 480px;
+  }
+  .feature-right h1 {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+  }
+  .feature-right h1 span {
+    color: #CC1A1A;
+  }
+  .feature-right p {
+    font-size: 18px;
+    color: #aaa;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+  .feature-pills {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    background: rgba(204,26,26,0.15);
+    border: 1px solid rgba(204,26,26,0.4);
+    color: #ff6b6b;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(204,26,26,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(204,26,26,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+</style>
+</head>
+<body>
+
+  <h2>Play Store Icon — 512×512px (screenshot this at 1:1)</h2>
+  <div class="icon-512">
+    <img src="pg_logo.png" alt="Production Guard">
+  </div>
+  <p class="label">Screenshot at exactly 512×512px. Use browser zoom at 100%.</p>
+
+  <h2 style="margin-top:60px">Feature Graphic — 1024×500px (screenshot this at 1:1)</h2>
+  <div class="feature-1024">
+    <div class="grid-lines"></div>
+    <div class="feature-left">
+      <img src="pg_logo.png" alt="Production Guard">
+    </div>
+    <div class="feature-right">
+      <h1>Lock Down<br/>Your <span>Production.</span></h1>
+      <p>Device control, crew tracking &amp;<br/>secure messaging — built for film &amp; TV.</p>
+      <div class="feature-pills">
+        <span class="pill">Kiosk Mode</span>
+        <span class="pill">GPS Tracking</span>
+        <span class="pill">Secure Messaging</span>
+      </div>
+    </div>
+  </div>
+  <p class="label">Screenshot at exactly 1024×500px. Use browser zoom at 100%.</p>
+
+</body>
+</html>

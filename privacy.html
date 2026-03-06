@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy — Production Guard</title>
+  <link rel="icon" type="image/png" href="pg_logo.png"/>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111;
+      --border: #222;
+      --gold: #CC1A1A;
+      --text-1: #f0f0f0;
+      --text-2: #999;
+      --text-3: #555;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav a.logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-1);
+      font-weight: 700;
+      font-size: 15px;
+    }
+    nav a.logo img { height: 32px; width: auto; }
+    nav a.back {
+      font-size: 13px;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a.back:hover { color: var(--text-1); }
+
+    /* Layout */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 24px 96px;
+    }
+    .header {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .header h1 span { color: var(--gold); }
+    .header p {
+      color: var(--text-2);
+      font-size: 14px;
+    }
+
+    /* Sections */
+    section { margin-bottom: 40px; }
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 18px;
+      background: var(--gold);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    p { color: var(--text-2); margin-bottom: 12px; }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 12px;
+    }
+    ul li {
+      color: var(--text-2);
+      padding: 4px 0 4px 20px;
+      position: relative;
+    }
+    ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--text-3);
+    }
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .highlight-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    .highlight-box p { margin: 0; font-size: 14px; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text-3);
+      font-size: 13px;
+    }
+    footer a { color: var(--text-2); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="/">
+      <img src="pg_logo.png" alt="Production Guard"/>
+      Production Guard
+    </a>
+    <a class="back" href="/">← Back to Home</a>
+  </nav>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>Privacy <span>Policy</span></h1>
+      <p>Last updated: March 6, 2026 &nbsp;·&nbsp; Effective: March 6, 2026</p>
+    </div>
+
+    <section>
+      <h2>Overview</h2>
+      <p>Production Guard ("we", "our", or "us") is a professional device management and crew coordination application built for film, television, and live event productions. This Privacy Policy explains what information we collect, how we use it, and the choices you have regarding your data.</p>
+      <p>By using the Production Guard app or website at <a href="https://productionguard.app">productionguard.app</a>, you agree to the practices described in this policy.</p>
+    </section>
+
+    <section>
+      <h2>Information We Collect</h2>
+
+      <p><strong style="color:var(--text-1)">Account Information</strong></p>
+      <ul>
+        <li>Email address (used to create and authenticate your Production Guard account)</li>
+        <li>License key (generated at purchase, used to activate the app)</li>
+      </ul>
+
+      <p><strong style="color:var(--text-1)">Location Data</strong></p>
+      <ul>
+        <li>Precise GPS location of enrolled crew and contestant devices, collected while the app is in use</li>
+        <li>Location data is visible only to the Production Manager who administers the production</li>
+        <li>Location tracking is a core feature of the service and is required for the app to function</li>
+      </ul>
+
+      <p><strong style="color:var(--text-1)">Production & Activity Data</strong></p>
+      <ul>
+        <li>Production names and configurations you create</li>
+        <li>Crew member enrollment records</li>
+        <li>In-app messages sent between users within a production</li>
+        <li>Activity logs (check-ins, device status events)</li>
+      </ul>
+
+      <p><strong style="color:var(--text-1)">Device Information</strong></p>
+      <ul>
+        <li>Device identifiers used for kiosk mode enforcement</li>
+        <li>App version and operating system version for support purposes</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>How We Use Your Information</h2>
+      <ul>
+        <li>To authenticate your account and validate your license</li>
+        <li>To display crew and contestant locations to the Production Manager</li>
+        <li>To deliver in-app messages between production participants</li>
+        <li>To enforce device lockdown (kiosk mode) as configured by the Production Manager</li>
+        <li>To maintain activity logs accessible to the Production Manager</li>
+        <li>To send transactional emails (license keys, receipts) to the email address provided at purchase</li>
+        <li>To respond to support requests</li>
+      </ul>
+      <p>We do not sell your personal information to third parties. We do not use your data for advertising.</p>
+    </section>
+
+    <section>
+      <h2>Data Sharing</h2>
+      <p>We use the following third-party services to operate Production Guard:</p>
+      <ul>
+        <li><strong style="color:var(--text-1)">Supabase</strong> — database, authentication, and backend infrastructure. Data is stored on servers in the United States. (<a href="https://supabase.com/privacy" target="_blank">Supabase Privacy Policy</a>)</li>
+        <li><strong style="color:var(--text-1)">Stripe</strong> — payment processing for license purchases. Production Guard does not store payment card information. (<a href="https://stripe.com/privacy" target="_blank">Stripe Privacy Policy</a>)</li>
+        <li><strong style="color:var(--text-1)">Resend</strong> — transactional email delivery for license keys and receipts. (<a href="https://resend.com/privacy" target="_blank">Resend Privacy Policy</a>)</li>
+      </ul>
+      <p>We may disclose information if required by law or to protect the rights and safety of our users.</p>
+    </section>
+
+    <section>
+      <h2>Location Data — Important Notice</h2>
+      <div class="highlight-box">
+        <p>Production Guard collects precise location data from enrolled crew and contestant devices. This data is used exclusively for production management by the assigned Production Manager. <strong>Crew members and contestants should be informed by their Production Manager that location tracking is active while the app is in use.</strong> Location data is not shared with any third parties beyond the infrastructure providers listed above.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Data Retention</h2>
+      <ul>
+        <li>Account and production data is retained for as long as your account is active</li>
+        <li>You may request deletion of your account and associated data by contacting us at <a href="mailto:support@productionguard.app">support@productionguard.app</a></li>
+        <li>Payment records are retained as required by applicable financial regulations</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Children's Privacy</h2>
+      <p>Production Guard is intended for use by adults in a professional production environment. We do not knowingly collect personal information from children under 13. If you believe a child has provided us with personal information, please contact us and we will delete it promptly.</p>
+    </section>
+
+    <section>
+      <h2>Security</h2>
+      <p>We implement industry-standard security measures including encrypted data transmission (HTTPS/TLS), secure authentication via Supabase Auth, and access controls that restrict production data to authorized managers. No method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+    </section>
+
+    <section>
+      <h2>Your Rights</h2>
+      <p>Depending on your location, you may have rights regarding your personal data including the right to access, correct, or delete your information. To exercise these rights, contact us at <a href="mailto:support@productionguard.app">support@productionguard.app</a>.</p>
+    </section>
+
+    <section>
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. We will notify users of significant changes by updating the "Last updated" date at the top of this page. Continued use of Production Guard after changes constitutes acceptance of the updated policy.</p>
+    </section>
+
+    <section>
+      <h2>Contact Us</h2>
+      <p>If you have any questions about this Privacy Policy or how we handle your data, please contact us:</p>
+      <div class="highlight-box">
+        <p>📧 <a href="mailto:support@productionguard.app">support@productionguard.app</a><br/>
+        🌐 <a href="https://productionguard.app">productionguard.app</a></p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>© 2026 Production Guard · <a href="/">Home</a> · <a href="mailto:support@productionguard.app">Contact</a></p>
+  </footer>
+
+</body>
+</html>
