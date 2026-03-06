@@ -926,6 +926,137 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* ── Buy Modal ──────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-2);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .modal-close:hover { color: var(--text-1); }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-1);
+      margin-bottom: 4px;
+    }
+    .modal-subtitle {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .modal-field { margin-bottom: 16px; }
+    .modal-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .modal-field input, .modal-field select {
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text-1);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .modal-field input:focus, .modal-field select:focus {
+      border-color: var(--gold);
+    }
+    .modal-price-preview {
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-price-preview .preview-label { font-size: 13px; color: var(--text-2); }
+    .modal-price-preview .preview-amount {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-1);
+    }
+    .modal-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .modal-submit:hover { opacity: 0.88; }
+    .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .modal-error {
+      color: #ff5555;
+      font-size: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+    /* Purchase success toast */
+    .purchase-toast {
+      display: none;
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a2e1a;
+      border: 1px solid #34c759;
+      color: #34c759;
+      border-radius: 12px;
+      padding: 16px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 2000;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .purchase-toast.show { display: block; }
   </style>
 </head>
 <body>
@@ -1261,7 +1392,7 @@
             <li>Geofence enforcement</li>
             <li>Full activity audit log</li>
           </ul>
-          <a href="mailto:sales@productionguard.app?subject=Production Manager Key" class="pricing-cta outline">Contact Sales</a>
+          <button class="pricing-cta outline" onclick="openBuyModal('pm')">Buy Manager Key — $65</button>
         </div>
 
         <!-- Contestant Keys -->
@@ -1283,7 +1414,9 @@
             <li>In-app messaging &amp; medic SOS</li>
             <li>Keys valid for entire production</li>
           </ul>
-          <a href="mailto:sales@productionguard.app?subject=Contestant Keys" class="pricing-cta gold">Get Started</a>
+          <div style="text-align:center;padding:14px;border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2);line-height:1.5;">
+            🔑 Contestant keys are purchased &amp; distributed<br>through the <strong style="color:var(--text-1)">Admin Dashboard</strong> after logging in.
+          </div>
         </div>
 
       </div>
@@ -1399,6 +1532,40 @@
     </div>
   </footer>
 
+  <!-- ─── Buy Modal ────────────────────────────────────────────── -->
+  <div id="buy-modal" class="modal-overlay" onclick="if(event.target===this)closeBuyModal()">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeBuyModal()" aria-label="Close">✕</button>
+      <div class="modal-title">Production Manager Key</div>
+      <div class="modal-subtitle">One-time purchase — instant access to the admin dashboard for unlimited productions.</div>
+
+      <div class="modal-field">
+        <label>Your email address</label>
+        <input type="email" id="modal-email" placeholder="you@studio.com" autocomplete="email">
+      </div>
+
+      <div class="modal-price-preview">
+        <span class="preview-label">Total (one-time)</span>
+        <span class="preview-amount">$65.00</span>
+      </div>
+
+      <button class="modal-submit" id="modal-submit" onclick="submitBuyModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Continue to Payment
+      </button>
+      <div class="modal-error" id="modal-error"></div>
+
+      <p style="font-size:11px;color:var(--text-2);text-align:center;margin-top:16px;line-height:1.6;">
+        Secured by <strong>Stripe</strong> · Your license key is emailed after purchase · No subscription — buy once, use forever.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── Purchase success toast ───────────────────────────────── -->
+  <div class="purchase-toast" id="purchase-toast">
+    ✅ Payment complete! Check your email for your Production Guard license key.
+  </div>
+
   <!-- ─── JS: Scroll fade-in animations ─────────────────────────── -->
   <script>
     const observer = new IntersectionObserver(
@@ -1414,6 +1581,93 @@
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   </script>
+
+  <!-- ─── JS: Buy Modal ─────────────────────────────────────────── -->
+  <script>
+    const CHECKOUT_URL = 'https://dkcecjxindnoxfflbsab.supabase.co/functions/v1/create-checkout';
+
+    function openBuyModal(type) {
+      // Only PM keys are sold on the site
+      document.getElementById('buy-modal').classList.add('open');
+      document.getElementById('modal-email').value = '';
+      document.getElementById('modal-error').style.display = 'none';
+      document.getElementById('modal-error').textContent = '';
+      document.getElementById('modal-submit').disabled = false;
+      document.getElementById('modal-submit').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Continue to Payment';
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('modal-email').focus(), 120);
+    }
+
+    function closeBuyModal() {
+      document.getElementById('buy-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeBuyModal();
+    });
+
+    async function submitBuyModal() {
+      const email = document.getElementById('modal-email').value.trim();
+      const errEl = document.getElementById('modal-error');
+      const submitBtn = document.getElementById('modal-submit');
+
+      // Basic validation
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.textContent = 'Please enter a valid email address.';
+        errEl.style.display = 'block';
+        document.getElementById('modal-email').focus();
+        return;
+      }
+
+      errEl.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Redirecting to Stripe…';
+
+      try {
+        const res = await fetch(CHECKOUT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'pm', email })
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || 'Could not create checkout session.');
+        }
+
+        const { url } = await res.json();
+        if (!url) throw new Error('No checkout URL returned. Please try again.');
+
+        // Redirect to Stripe Checkout
+        window.location.href = url;
+
+      } catch (err) {
+        errEl.textContent = err.message || 'Something went wrong. Please try again.';
+        errEl.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Continue to Payment';
+      }
+    }
+
+    // ─── Show success toast if returning from Stripe ─────────────
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('purchase') === 'success') {
+        const toast = document.getElementById('purchase-toast');
+        toast.classList.add('show');
+        // Clean up URL
+        const clean = window.location.pathname;
+        window.history.replaceState({}, '', clean);
+        setTimeout(() => toast.classList.remove('show'), 8000);
+      }
+    })();
+  </script>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 
 </body>
 </html>
